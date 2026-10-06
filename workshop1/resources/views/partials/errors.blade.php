@@ -1,5 +1,5 @@
 @if($errors->any())
-    <div>
+    <div class="error-box">
         <h3>Please fix the following errors:</h3>
         <ul>
             @foreach($errors->all() as $error)

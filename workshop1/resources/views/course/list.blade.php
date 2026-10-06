@@ -3,11 +3,13 @@
 @section('title', 'Courses')
 
 @section('content')
-    <h1>Courses</h1>
+<div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h1 style="margin-bottom:0;">Courses</h1>
+        <a href="{{ route('courses.create') }}" class="btn btn-primary">+ Add Course</a>
+    </div>
 
-    <a href="{{ route('courses.create') }}">Create Course</a>
-
-    <table border="1" cellpadding="10">
+    <table>
         <thead>
             <tr>
                 <th>ID</th>
@@ -25,29 +27,36 @@
                     <td>{{ $course->id }}</td>
                     <td>{{ $course->name }}</td>
                     <td>{{ $course->duration }}</td>
-                    <td>{{ number_format($course->fee, 2) }}</td>
+                    <td>£{{ number_format($course->fee, 2) }}</td>
                     <td>{{ $course->difficulty }}</td>
-                    <td>{{ $course->is_active ? 'Yes' : 'No' }}</td>
                     <td>
-                        <a href="{{ route('courses.show', $course) }}">View</a>
-                        <a href="{{ route('courses.edit', $course) }}">Edit</a>
-
-                        <form
-                            action="{{ route('courses.destroy', $course) }}"
-                            method="POST"
-                            style="display:inline"
-                        >
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Delete</button>
-                        </form>
+                        @if($course->is_active)
+                            <span class="badge badge-yes">Yes</span>
+                        @else
+                            <span class="badge badge-no">No</span>
+                        @endif
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <a href="{{ route('courses.show', $course) }}" class="btn btn-info">View</a>
+                            <a href="{{ route('courses.edit', $course) }}" class="btn btn-warning">Edit</a>
+                            <form action="{{ route('courses.destroy', $course) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Delete this course?')">Delete</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7">No courses found.</td>
+                    <td colspan="7" style="text-align:center; color:var(--muted); padding:2rem;">
+                        No courses found.
+                    </td>
                 </tr>
             @endforelse
         </tbody>
     </table>
+</div>
 @endsection
